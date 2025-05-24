@@ -1,0 +1,21 @@
+<div class="home">
+  <h2>Ваши наборы карточек</h2>
+
+  <form (submit)="add()" class="new-set">
+    <input [(ngModel)]="title" name="title" placeholder="Название набора" required />
+    <input [(ngModel)]="description" name="description" placeholder="Описание (необязательно)" />
+    <button type="submit">Добавить</button>
+  </form>
+
+  <div *ngIf="sets.length === 0">Наборов пока нет</div>
+
+  <ul>
+    <li *ngFor="let set of sets">
+      <div>
+        <strong>{{ set.title }}</strong><br />
+        <small>{{ set.description }}</small>
+      </div>
+      <button (click)="remove(set.id)">Удалить</button>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,27 @@
+<div class="register-container">
+  <h2>Регистрация</h2>
+
+  <form (submit)="onRegister()">
+    <input
+      type="email"
+      [(ngModel)]="email"
+      name="email"
+      placeholder="Email"
+      required
+    />
+    <input
+      type="password"
+      [(ngModel)]="password"
+      name="password"
+      placeholder="Пароль"
+      required
+    />
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+
+  <div class="divider">или</div>
+
+  <button class="google-btn" (click)="googleLogin()">
+    Войти через Google
+  </button>
+</div>
