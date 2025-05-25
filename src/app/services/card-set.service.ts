@@ -1,55 +1,47 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { v4 as uuid } from 'uuid';
-import { Card, CardSet } from '../models/card-set.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CardSet, Card } from '../models/card-set.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CardSetService {
-  private sets: CardSet[] = [];
-  private cards: Card[] = [];
+  private readonly API = `${environment.apiUrl}/card-sets`;
 
-  private sets$ = new BehaviorSubject<CardSet[]>([]);
+  constructor(private http: HttpClient) {}
 
-  getCardSets$() {
-    return this.sets$.asObservable();
+  // Получить все наборы пользователя
+  getCardSets$(): Observable<CardSet[]> {
+    return this.http.get<CardSet[]>(this.API);
   }
 
-  addSet(title: string, description?: string): CardSet {
-    const newSet: CardSet = {
-      id: uuid(),
-      title,
-      description,
-      createdAt: new Date()
-    };
-    this.sets.push(newSet);
-    this.sets$.next(this.sets);
-    return newSet;
+  // Получить один набор
+  getSetById(id: string): Observable<CardSet> {
+    return this.http.get<CardSet>(`${this.API}/${id}`);
   }
 
-  removeSet(id: string) {
-    this.sets = this.sets.filter((s) => s.id !== id);
-    this.cards = this.cards.filter((c) => c.setId !== id);
-    this.sets$.next(this.sets);
+  // Создать новый набор
+  addSet(title: string, description?: string): Observable<CardSet> {
+    return this.http.post<CardSet>(this.API, { title, description });
   }
 
-  getSetById(id: string): CardSet | undefined {
-    return this.sets.find((s) => s.id === id);
+  // Удалить набор
+  removeSet(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API}/${id}`);
   }
 
-  getCardsForSet(setId: string): Card[] {
-    return this.cards.filter((card) => card.setId === setId);
+  // Добавить карточку в набор
+  addCard(setId: string, card: Omit<Card, 'id' | 'setId'>): Observable<Card> {
+    return this.http.post<Card>(`${this.API}/${setId}/cards`, card);
   }
 
-  addCard(setId: string, data: Omit<Card, 'id' | 'setId'>) {
-    const card: Card = {
-      id: uuid(),
-      setId,
-      ...data
-    };
-    this.cards.push(card);
+  // Получить карточки набора (можно встроено или отдельно)
+  getCardsForSet(setId: string): Observable<Card[]> {
+    return this.http.get<Card[]>(`${this.API}/${setId}`);
   }
 
-  removeCard(cardId: string) {
-    this.cards = this.cards.filter((c) => c.id !== cardId);
+  // Удалить карточку
+  removeCard(cardId: string): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/cards/${cardId}`);
   }
 }

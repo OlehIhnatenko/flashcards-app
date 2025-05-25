@@ -31,8 +31,10 @@ export class CardSetComponent {
     private sets: CardSetService
   ) {
     const id = this.route.snapshot.paramMap.get('id') || '';
-    const set: CardSet | undefined = this.sets.getSetById(id);
-    this.setTitle = set?.title || '(Без названия)';
+    this.sets.getSetById(id).subscribe((set) => {
+      this.setTitle = set?.title || '(Без названия)';
+    });
+
   }
 
   addCard() {

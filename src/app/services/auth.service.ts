@@ -7,7 +7,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   onAuthStateChanged,
-  User
+  User,
 } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 
@@ -19,7 +19,18 @@ export class AuthService {
   constructor(private auth: Auth) {
     onAuthStateChanged(this.auth, (user) => {
       this.userSubject.next(user);
+      if (user) {
+        user.getIdToken().then((token) => {
+          localStorage.setItem('accessToken', token);
+        });
+      } else {
+        localStorage.removeItem('accessToken');
+      }
     });
+  }
+
+  get accessToken(): string | null {
+    return localStorage.getItem('accessToken');
   }
 
   login(email: string, password: string) {
@@ -35,6 +46,7 @@ export class AuthService {
   }
 
   logout() {
+    localStorage.removeItem('accessToken');
     return signOut(this.auth);
   }
 

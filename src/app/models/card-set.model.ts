@@ -12,4 +12,5 @@ export interface Card {
   backText?: string;
   frontImage?: string;
   backImage?: string;
+  cards?: any;
 }
