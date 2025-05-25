@@ -1,1 +1,20 @@
-<p>login works!</p>
+<div class="login-container">
+  <h2>Вход</h2>
+
+  <form (submit)="onLogin()">
+    <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required />
+    <input type="password" [(ngModel)]="password" name="password" placeholder="Пароль" required />
+    <button type="submit">Войти</button>
+  </form>
+
+  <div class="divider">или</div>
+
+  <button class="google-btn" (click)="googleLogin()">
+    Войти через Google
+  </button>
+
+  <div class="link-to-register">
+    Нет аккаунта?
+    <a routerLink="/register">Зарегистрироваться</a>
+  </div>
+</div>

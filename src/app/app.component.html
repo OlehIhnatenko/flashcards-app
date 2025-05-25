@@ -1,1 +1,6 @@
-<router-outlet />
+<header class="navbar" *ngIf="auth.user$ | async as user">
+  <span>Привет, {{ user.email }}</span>
+  <button (click)="logout()">Выйти</button>
+</header>
+
+<router-outlet></router-outlet>
