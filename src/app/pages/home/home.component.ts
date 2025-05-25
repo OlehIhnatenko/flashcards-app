@@ -1,35 +1,54 @@
 import { Component } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardSetService } from '../../services/card-set.service';
-import { CardSet } from '../../models/card-set.model';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, RouterModule],
+  imports: [
+    FormsModule,
+    RouterModule,
+    NgIf,
+    NgFor,
+    AsyncPipe,
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  sets: CardSet[] = [];
+  sets$;
 
   title = '';
   description = '';
 
+  setToDelete: string | null = null;
+
   constructor(private cardSetService: CardSetService) {
-    this.cardSetService.getCardSets$().subscribe((data) => (this.sets = data));
+    this.sets$ = this.cardSetService.getCardSets$();
   }
 
   add() {
     if (!this.title.trim()) return;
-    this.cardSetService.addSet(this.title, this.description);
+
+    this.cardSetService.addSet(this.title.trim(), this.description.trim());
     this.title = '';
     this.description = '';
   }
 
-  remove(id: string) {
-    this.cardSetService.removeSet(id);
+  confirmDelete(id: string) {
+    this.setToDelete = id;
+  }
+
+  cancelDelete() {
+    this.setToDelete = null;
+  }
+
+  removeConfirmed() {
+    if (this.setToDelete) {
+      this.cardSetService.removeSet(this.setToDelete);
+      this.setToDelete = null;
+    }
   }
 }

@@ -1,0 +1,19 @@
+<div class="study-container" *ngIf="currentCard">
+  <h2>Изучение: {{ setTitle }}</h2>
+
+  <div class="card-flip" [class.flipped]="flipped" (click)="toggleFlip()">
+    <div class="side front">
+      <div *ngIf="currentCard.frontText">{{ currentCard.frontText }}</div>
+      <img *ngIf="currentCard.frontImage" [src]="currentCard.frontImage" />
+    </div>
+    <div class="side back">
+      <div *ngIf="currentCard.backText">{{ currentCard.backText }}</div>
+      <img *ngIf="currentCard.backImage" [src]="currentCard.backImage" />
+    </div>
+  </div>
+
+  <div class="controls">
+    <button (click)="prev()">← Назад</button>
+    <button (click)="next()">Вперёд →</button>
+  </div>
+</div>

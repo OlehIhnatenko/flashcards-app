@@ -23,5 +23,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/card-set/card-set.component').then(m => m.CardSetComponent),
     canActivate: [authGuard]
+  },
+  {
+    path: 'study/:id',
+    loadComponent: () =>
+      import('./pages/study-mode/study-mode.component').then(m => m.StudyModeComponent),
+    canActivate: [authGuard]
   }
 ];

@@ -1,23 +1,43 @@
-<div class="home">
+<div class="home-container">
   <h2>Ваши наборы карточек</h2>
 
-  <form (submit)="add()" class="new-set">
-    <input [(ngModel)]="title" name="title" placeholder="Название набора" required />
-    <input [(ngModel)]="description" name="description" placeholder="Описание (необязательно)" />
-    <button type="submit">Добавить</button>
-  </form>
+  <div class="form">
+    <input [(ngModel)]="title" placeholder="Название набора" />
+    <input [(ngModel)]="description" placeholder="Описание (необязательно)" />
+    <button (click)="add()">Добавить</button>
+  </div>
 
-  <div *ngIf="sets.length === 0">Наборов пока нет</div>
+  <ng-container *ngIf="sets$ | async as sets">
+    <div *ngIf="sets.length === 0" class="empty">Наборов пока нет</div>
 
-  <ul>
-    <li *ngFor="let set of sets">
-      <div>
-        <a [routerLink]="['/sets', set.id]">
-          <strong>{{ set.title }}</strong>
-        </a><br />
-        <small>{{ set.description }}</small>
+    <ul>
+      <li *ngFor="let set of sets">
+        <div class="set-title">{{ set.title }}</div>
+
+        <div class="actions">
+          <button class="edit" [routerLink]="['/sets', set.id]">
+            ✏️ Редактировать
+          </button>
+
+          <button class="study" [routerLink]="['/study', set.id]">
+            📖 Изучать
+          </button>
+
+          <button class="delete" (click)="confirmDelete(set.id)">
+            🗑 Удалить
+          </button>
+        </div>
+      </li>
+    </ul>
+  </ng-container>
+
+  <div class="modal-backdrop" *ngIf="setToDelete">
+    <div class="modal">
+      <p>Вы уверены, что хотите удалить набор?</p>
+      <div class="modal-actions">
+        <button class="cancel" (click)="cancelDelete()">Отмена</button>
+        <button class="confirm" (click)="removeConfirmed()">Удалить</button>
       </div>
-      <button (click)="remove(set.id)">Удалить</button>
-    </li>
-  </ul>
+    </div>
+  </div>
 </div>
