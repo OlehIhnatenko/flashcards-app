@@ -28,4 +28,8 @@ export class CardSetService {
     this.sets = this.sets.filter((set) => set.id !== id);
     this.sets$.next(this.sets);
   }
+
+  getSetById(id: string): CardSet | undefined {
+    return this.sets.find((s) => s.id === id);
+  }
 }

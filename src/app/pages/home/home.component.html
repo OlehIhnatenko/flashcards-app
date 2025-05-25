@@ -12,7 +12,9 @@
   <ul>
     <li *ngFor="let set of sets">
       <div>
-        <strong>{{ set.title }}</strong><br />
+        <a [routerLink]="['/sets', set.id]">
+          <strong>{{ set.title }}</strong>
+        </a><br />
         <small>{{ set.description }}</small>
       </div>
       <button (click)="remove(set.id)">Удалить</button>

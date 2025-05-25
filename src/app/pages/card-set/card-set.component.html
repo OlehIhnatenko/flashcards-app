@@ -1,0 +1,44 @@
+<div class="card-set">
+  <h2>Карточки набора "{{ setTitle }}"</h2>
+
+  <form (submit)="addCard()" class="card-form">
+    <label>
+      Лицевая сторона (до 512 символов):
+      <textarea [(ngModel)]="frontText" name="frontText" maxlength="512"></textarea>
+    </label>
+    <label>
+      Загрузить изображение:
+      <input type="file" accept="image/*" (change)="onImageUpload($event, 'front')" />
+    </label>
+
+    <label>
+      Обратная сторона (до 512 символов):
+      <textarea [(ngModel)]="backText" name="backText" maxlength="512"></textarea>
+    </label>
+    <label>
+      Загрузить изображение:
+      <input type="file" accept="image/*" (change)="onImageUpload($event, 'back')" />
+    </label>
+
+    <button type="submit">Добавить карточку</button>
+  </form>
+
+  <div *ngIf="cards.length === 0">Карточек пока нет</div>
+
+  <ul>
+    <li *ngFor="let card of cards; let i = index">
+      <div class="card">
+        <div class="side">
+          <div *ngIf="card.frontText"><strong>{{ card.frontText }}</strong></div>
+          <img *ngIf="card.frontImage" [src]="card.frontImage" alt="front" />
+        </div>
+
+        <div class="side">
+          <div *ngIf="card.backText"><small>{{ card.backText }}</small></div>
+          <img *ngIf="card.backImage" [src]="card.backImage" alt="back" />
+        </div>
+      </div>
+      <button (click)="removeCard(i)">Удалить</button>
+    </li>
+  </ul>
+</div>
